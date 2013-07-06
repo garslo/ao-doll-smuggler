@@ -7,5 +7,8 @@
 (defn max-weight-line? [line]
   (let [max-weight-regex #"^\s*max weight:\s*\d+\s*$"]
     (re-find max-weight-regex line)))
+
+(defn get-max-weight-from-line [line]
+  (let [data-sections (split line #":")
         weight-string (trim (last data-sections))]
     (Integer/parseInt weight-string)))
