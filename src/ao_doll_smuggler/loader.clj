@@ -22,3 +22,10 @@
   (let [lines (split-lines data)
         weight-line (first (filter #'max-weight-line? lines))]
     (get-max-weight-from-line weight-line)))
+
+(defn doll-info-line? [line]
+  "A predicate determining if `line' is formatted as a doll
+  information line."
+  ;; A doll info line looks like "<alphabetic_name> <digits> <digits>"
+  (let [doll-info-regex #"^\s*[a-zA-Z]+\s+\d+\s+\d+"]
+   (re-find doll-info-regex line)))

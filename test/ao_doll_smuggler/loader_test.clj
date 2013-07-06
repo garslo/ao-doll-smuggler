@@ -45,3 +45,12 @@
                           "\n"
                           "Lines of Data\n"
                           "foo 100   43"))))
+
+(defn build-doll-string [name weight value]
+  (str name " " weight " " value))
+
+(deftest test-doll-info-line?
+  (is (doll-info-line? "foo 10 34"))
+  (is (not (doll-info-line? "foo1 12 44")))
+  (is (not (doll-info-line? "forty-three 14 99")))
+  (is (not (doll-info-line? "brew 103.2 9"))))
