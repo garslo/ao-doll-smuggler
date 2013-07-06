@@ -29,3 +29,16 @@
   ;; A doll info line looks like "<alphabetic_name> <digits> <digits>"
   (let [doll-info-regex #"^\s*[a-zA-Z]+\s+\d+\s+\d+"]
    (re-find doll-info-regex line)))
+
+(defn get-doll-info-from-line [line]
+  "Retrieves the doll information from `line'. Returns a
+   hash-map containing the doll's information.
+
+   Example:
+      (get-doll-info-from-line \"fred 10 43\")
+      ; => {:name \"fred\" :weight 10 :value 43}"
+  (let [doll-info (split line #"\s+")
+        name (nth doll-info 0)
+        weight (Integer/parseInt (nth doll-info 1))
+        value (Integer/parseInt (nth doll-info 2))]
+    (hash-map :name name :weight weight :value value)))
