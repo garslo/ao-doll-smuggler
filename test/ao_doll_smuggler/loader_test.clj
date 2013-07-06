@@ -33,3 +33,15 @@
               (is (= weight result))))]
     (run-single-test 10)
     (run-single-test 20)))
+
+;;; TODO: Add failure tests
+(deftest test-get-max-weight-multiple-line-input
+  "Tests the get-max-weight function with multi-line inputs."
+  (letfn [(run-single-test [weight input-string]
+            (let [result (get-max-weight input-string)]
+              (is (= weight result))))]
+    (run-single-test 20
+                     (str "max weight: " 20 "\n"
+                          "\n"
+                          "Lines of Data\n"
+                          "foo 100   43"))))
