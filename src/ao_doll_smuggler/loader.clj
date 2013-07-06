@@ -1,5 +1,5 @@
 (ns ao-doll-smuggler.loader
-  (:require [clojure.string :refer [split trim]])
+  (:require [clojure.string :refer [split split-lines trim]])
   (:gen-class))
 
 (defn get-max-weight [data]
