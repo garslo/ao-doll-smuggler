@@ -55,3 +55,6 @@
 (defn create-knapsack-solver [doll-data]
   (fn [position max-weight]
     (max-value doll-data position max-weight)))
+
+(defn collect-included-dolls [max-value-fn max-weight doll-data]
+  )
