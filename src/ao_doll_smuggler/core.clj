@@ -1,7 +1,16 @@
 (ns ao-doll-smuggler.core
   (:require [clojure.tools.cli :refer [cli]]
-            [ao-doll-smuggler.loader :refer [get-doll-info get-max-weight]])
+            [ao-doll-smuggler.loader :refer [get-doll-info
+                                             get-max-weight]]
+            [ao-doll-smuggler.knapsack :refer [collect-dolls-in-solution]])
   (:gen-class))
+
+(defn print-solution [dolls]
+  (doseq [doll dolls]
+    (let [name (doll :name)
+          weight (doll :weight)
+          value (doll :value)]
+      (println name "\t" weight "\t" value))))
 
 (defn -main
   "I don't do a whole lot ... yet."
@@ -17,7 +26,9 @@
         (println "Please specify an input file.")
         (System/exit 0)))
 
-    (let [contents (slurp input-file)]
-      (println "Max weight: " (get-max-weight contents))
-      (println "Doll info: " (get-doll-info contents)))
-    ))
+    (let [contents (slurp input-file)
+          max-weight (get-max-weight contents)
+          doll-data (get-doll-info contents)
+          dolls (collect-dolls-in-solution doll-data
+                                           max-weight)]
+      (print-solution dolls))))
