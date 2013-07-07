@@ -38,6 +38,7 @@
       (get-doll-info-from-line \"fred 10 43\")
       ; => {:name \"fred\" :weight 10 :value 43}"
   (let [doll-info (split line #"\s+")
+        ;; TODO: clojure allows unpacking!
         name (nth doll-info 0)
         weight (Integer/parseInt (nth doll-info 1))
         value (Integer/parseInt (nth doll-info 2))]
