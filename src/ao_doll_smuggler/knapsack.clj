@@ -1,29 +1,64 @@
 (ns ao-doll-smuggler.knapsack
-  (:require )
   (:gen-class))
 
-(def example-doll-info
-  [{:name "omicron" :weight 100 :value 150}
-   {:name "fry" :weight 30 :value 1}
-   {:name "farnsworth" :weight 10 :value 59}
-   {:name "bender" :weight 89 :value 13}])
+(defn position->index [position]
+  (- position 1))
 
-(defn pseudo-knapsack [max-weight doll-info]
+(defn index->position [index]
+  (+ index 1))
 
-  (defn weight [index]
-    (let [doll (nth doll-info index)]
-      (doll :weight)))
+(defn invalid-position? [position]
+  (< position 1))
 
-  (defn value [index]
-    (let [doll (nth doll-info index)]
-      (doll :value)))
+(defn invalid-weight? [weight]
+  (<= weight 0))
 
-  (defn max-value [index max-weight]
-    (if (= index 0)
+(defn invalid-position-or-weight? [position weight]
+  (or (invalid-position? position)
+      (invalid-weight? weight)))
+
+(defn weight [position doll-info]
+  (if (invalid-position? position)
+    0
+    (let [index (position->index position)
+          doll (nth doll-info index)]
+      (doll :weight))))
+
+(defn value [position doll-info]
+  (if (invalid-position? position)
+    0
+    (let [index (position->index position)
+          doll (nth doll-info index)]
+      (doll :value))))
+
+(defn max-value [doll-data position max-weight]
+  (let [memoized-max-value (memoize max-value)
+        doll-weight (weight position doll-data)
+        max-without-this-doll (fn []
+                                (memoized-max-value doll-data
+                                                    (- position 1)
+                                                    max-weight))
+        max-with-this-doll (fn []
+                             (memoized-max-value doll-data
+                                                 (- position 1)
+                                                 (- max-weight doll-weight)))
+        doll-can-fit? (fn []
+                        (> max-weight doll-weight))]
+    ;; Start of 0/1 knapsack algorithm
+    (if (invalid-position-or-weight? position max-weight)
       0
-      (if (> max-weight (weight index))
-        (max (max-value (- index 1) max-weight)
-             (+ (value index)
-                (max-value (- index 1) (- max-weight (weight index)))))
-        (max-value (- index 1) (weight index)))))
-  max-value)
+      (if (doll-can-fit?)
+        (max (max-without-this-doll)
+             (+ (value position doll-data) (max-with-this-doll)))
+        (max-without-this-doll)))))
+
+;(defn print-row [w doll-data]
+;  (print w " ")
+;  (for [i (range 1 (+ 1 (count doll-data)))]
+;    (print (max-value doll-data i w) " ")))
+;
+;(defn print-table [doll-data max-weight]
+;  (for [w (range max-weight)]
+;    (do
+;      (print-row w doll-data)
+;      (println))))
