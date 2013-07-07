@@ -11,7 +11,7 @@
 
 (defn get-max-weight-from-line [line]
   "Assuming `line' is a 'max weight' line (verified by
-   `max-weight-line?', extracts the indicated weight as an integer."
+   `max-weight-line?'), extracts the indicated weight as an integer."
   (let [data-sections (split line #":")
         weight-string (trim (last data-sections))]
     (Integer/parseInt weight-string)))
