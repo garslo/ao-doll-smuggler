@@ -42,3 +42,10 @@
         weight (Integer/parseInt (nth doll-info 1))
         value (Integer/parseInt (nth doll-info 2))]
     (hash-map :name name :weight weight :value value)))
+
+(defn get-doll-info [data]
+  "Given `data', a string with the contents of a suitable input file,
+  returns a (LIST OR VECTOR?) of the doll information."
+  (let [lines (split-lines data)
+        doll-lines (filter #'doll-info-line? lines)]
+    (map #'get-doll-info-from-line doll-lines)))

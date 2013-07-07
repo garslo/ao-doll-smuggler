@@ -63,3 +63,11 @@
                        (= weight (result :weight))
                        (= value (result :value))))))]
     (run-single-test "odysseus" 12 1000)))
+
+(deftest test-get-doll-info
+  (let [doll-data (str (build-doll-string "barney" 10 32) "\n"
+                       (build-doll-string "junior" 2 10))
+        result (get-doll-info doll-data)]
+    (is (= result
+           '({:name "barney" :weight 10 :value 32}
+             {:name "junior" :weight 2 :value 10})))))
