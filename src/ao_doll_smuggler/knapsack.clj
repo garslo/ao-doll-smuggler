@@ -52,13 +52,6 @@
              (+ (value position doll-data) (max-with-this-doll)))
         (max-without-this-doll)))))
 
-;(defn print-row [w doll-data]
-;  (print w " ")
-;  (for [i (range 1 (+ 1 (count doll-data)))]
-;    (print (max-value doll-data i w) " ")))
-;
-;(defn print-table [doll-data max-weight]
-;  (for [w (range max-weight)]
-;    (do
-;      (print-row w doll-data)
-;      (println))))
+(defn create-knapsack-solver [doll-data]
+  (fn [position max-weight]
+    (max-value doll-data position max-weight)))
