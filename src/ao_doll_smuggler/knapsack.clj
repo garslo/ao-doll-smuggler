@@ -17,31 +17,6 @@
   (or (invalid-position? position)
       (invalid-weight? weight)))
 
-(defn weight [position doll-info]
-  (if (invalid-position? position)
-    0
-    (let [index (position->index position)
-          doll (nth doll-info index)]
-      (doll :weight))))
-
-(defn value [position doll-info]
-  (if (invalid-position? position)
-    0
-    (let [index (position->index position)
-          doll (nth doll-info index)]
-      (doll :value))))
-
-(defn max-value [doll-data position max-weight]
-  (let [memoized-max-value (memoize max-value)
-        doll-weight (weight position doll-data)
-        max-without-this-doll (fn []
-                                (memoized-max-value doll-data
-                                                    (- position 1)
-                                                    max-weight))
-        max-with-this-doll (fn []
-                             (memoized-max-value doll-data
-                                                 (- position 1)
-                                                 (- max-weight doll-weight)))
         doll-can-fit? (fn []
                         (> max-weight doll-weight))]
     ;; Start of 0/1 knapsack algorithm
@@ -56,5 +31,3 @@
   (fn [position max-weight]
     (max-value doll-data position max-weight)))
 
-(defn collect-included-dolls [max-value-fn max-weight doll-data]
-  )
