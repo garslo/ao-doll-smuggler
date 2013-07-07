@@ -56,11 +56,10 @@
   (is (not (doll-info-line? "brew 103.2 9"))))
 
 (deftest test-get-doll-info-from-line
-  (let [name "odysseus"
-        weight 12
-        value 1000
-        doll-string (build-doll-string name weight value)
-        result (get-doll-info-from-line doll-string)]
-    (is (and (= name (result :name))
-             (= weight (result :weight))
-             (= value (result :value))))))
+  (letfn [(run-single-test [name weight value]
+            (let [doll-string (build-doll-string name weight value)
+                  result (get-doll-info-from-line doll-string)]
+              (is (and (= name (result :name))
+                       (= weight (result :weight))
+                       (= value (result :value))))))]
+    (run-single-test "odysseus" 12 1000)))
