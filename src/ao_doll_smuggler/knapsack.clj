@@ -62,7 +62,7 @@
   "Returns the maximum value obtainable with the doll at `position'
    with max weight `current-weight' placed in the knapsack."
   (let [doll (get-doll doll-data position)
-        new-position (- position 1)
+        new-position (dec position)
         new-weight (- current-weight (doll :weight))]
       (max-value doll-data new-position new-weight)))
 
@@ -70,13 +70,10 @@
 (defn max-without-doll [doll-data position current-weight]
   "Returns the maximum value obtainable without the doll at `position'
    with max weight `current-weight' in the knapsack."
-  (let [new-position (- position 1)]
+  (let [new-position (dec position)]
     (max-value doll-data new-position current-weight)))
 
 
-(defn create-knapsack-solver [doll-data]
-  (fn [position max-weight]
-    (max-value doll-data position max-weight)))
 
 (defn doll-is-included? [doll-data position weight]
   "Determines if the doll at `position' and `weight' is included in
@@ -84,8 +81,6 @@
   (not (= (max-value doll-data position weight)
           (max-value doll-data (- position 1) weight))))
 
-
-;;; TODO: This is ugly
 (defn collect-dolls-in-solution [doll-data max-weight]
   "Returns a set containing the dolls in `doll-data' which comprise
    the optimal knapsack solution."

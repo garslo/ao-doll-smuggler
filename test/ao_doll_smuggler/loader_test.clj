@@ -24,7 +24,6 @@
     (run-single-test 10)
     (run-single-test 5)))
 
-;;; TODO: Add failure tests
 (deftest test-get-max-weight-single-line-input
   "Tests the get-max-weight function with single line inputs."
   (letfn [(run-single-test [weight]
@@ -34,7 +33,6 @@
     (run-single-test 10)
     (run-single-test 20)))
 
-;;; TODO: Add failure tests
 (deftest test-get-max-weight-multiple-line-input
   "Tests the get-max-weight function with multi-line inputs."
   (letfn [(run-single-test [weight input-string]
