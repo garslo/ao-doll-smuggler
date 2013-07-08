@@ -15,16 +15,23 @@ instance. You can find the basic algorithm in many places, including
 created and tested with Leingingen 2.2.0 (available on
 [GitHub](https://raw.github.com/technomancy/leiningen/stable/bin/lein)).
 
+### Running
+
+To determine the optimal drug-packing schema, run `lein run
+path/to/data/file.txt` in the project's root directory.
+
+### Testing
+
+To run the tests, run `lein test` in the project's root directory.
+
+### Input Format
+
 The program needs a suitably formatted input file. Specifically, any
 line equivalent to `max weight: <digits>` (up to whitespace) will be
 treated as the maximum weight declaration. Any line formatted as
 `<alphabetic> <digits> <digits>` (up to whitespace) will be treated as
 a doll listing. Any line not fitting these specifications will be
 ignored. See `resources/` for examples.
-
-To determine the optimal drug-packing schema, run `lein run
-path/to/data/file.txt` in the project's root directory. To run the
-tests, run `lein test` in the project's root directory.
 
 ## Options
 
