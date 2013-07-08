@@ -35,3 +35,33 @@
           result (collect-dolls-in-solution doll-data
                                             max-weight)]
     (is (= result included-dolls)))))
+
+(defn test-collect-dolls-in-solution-from-file [file expected-dolls]
+  "Loads data from `file' and tests output against `expected-dolls'."
+  (let [contents (slurp file)
+        max-weight (get-max-weight contents)
+        doll-data (get-doll-info contents)
+        result (collect-dolls-in-solution doll-data max-weight)]
+    (is (every? #(contains? expected-dolls (:name %1)) result))))
+
+(deftest test-collect-dolls-in-solution-from-multiple-files
+  (test-collect-dolls-in-solution-from-file "resources/test_data_1.txt"
+                                            #{"sally" "eddie"
+                                              "grumpy" "dusty"
+                                              "grumpkin" "marc"
+                                              "randal" "puppy"
+                                              "dorothy" "candice"
+                                              "anthony" "luke"})
+  (test-collect-dolls-in-solution-from-file "resources/test_data_2.txt"
+                                            #{"map"
+                                              "compass"
+                                              "water"
+                                              "sandwich"
+                                              "glucose"
+                                              "banana"
+                                              "suntancream"
+                                              "waterprooftrousers"
+                                              "waterproofoverclothes"
+                                              "notecase"
+                                              "sunglasses"
+                                              "socks"}))

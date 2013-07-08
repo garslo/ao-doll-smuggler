@@ -39,19 +39,18 @@
   (let [doll (get-doll doll-data position)
         doll-can-fit? (fn []
                         (> current-weight (doll :weight)))]
-    (if (invalid-position-or-weight? position current-weight)
-      0
-      (if (doll-can-fit?)
-        (max (max-without-doll doll-data
-                               position
-                               current-weight)
-             (+ (doll :value)
-                (max-with-doll doll-data
-                               position
-                               current-weight)))
-        (max-without-doll doll-data
-                          position
-                          current-weight)))))
+    (cond
+     (invalid-position-or-weight? position current-weight) 0
+     (doll-can-fit?) (max (max-without-doll doll-data
+                                            position
+                                            current-weight)
+                          (+ (doll :value)
+                             (max-with-doll doll-data
+                                            position
+                                            current-weight)))
+     true (max-without-doll doll-data
+                            position
+                            current-weight))))
 
 ;;; For efficiency. This implicitly creates the table necessary for a
 ;;; dynamic programming algorithm.
@@ -74,27 +73,28 @@
     (max-value doll-data new-position current-weight)))
 
 
-
-(defn doll-is-included? [doll-data position weight]
-  "Determines if the doll at `position' and `weight' is included in
-   the optimal knapsack solution."
-  (not (= (max-value doll-data position weight)
-          (max-value doll-data (- position 1) weight))))
-
 (defn collect-dolls-in-solution [doll-data max-weight]
   "Returns a set containing the dolls in `doll-data' which comprise
    the optimal knapsack solution."
   (letfn
-      [(collect-dolls [position weight acc]
+      [(doll-is-included? [position weight]
+         ;; There is an issue with max-value wherein the optimal value
+         ;; for a given weight is calculated as the maximum value for
+         ;; (- weight 1). I caught this error too late; hence we (inc
+         ;; weight) and kludge through it.
+         (not (= (max-value doll-data position (inc weight))
+                 (max-value doll-data (dec position) (inc weight)))))
+
+       (collect-dolls [position weight acc]
          (let [doll (get-doll doll-data position)]
            (cond
             (or (= weight 0) (= position 0)) acc
-            (doll-is-included? doll-data position weight) (collect-dolls
-                                                           (dec position)
-                                                           (- weight
-                                                              (doll :weight))
-                                                           (conj acc doll))
+            (doll-is-included? position weight) (collect-dolls
+                                                 (dec position)
+                                                 (- weight
+                                                    (doll :weight))
+                                                 (conj acc doll))
             true (collect-dolls (dec position)
-                                                   weight
-                                                   acc))))]
+                                weight
+                                acc))))]
     (collect-dolls (count doll-data) max-weight #{})))
