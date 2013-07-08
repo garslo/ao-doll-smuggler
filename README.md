@@ -58,7 +58,7 @@ luke	9	150
 sally	4	50
 ```
 
-### Bugs
+## Bugs
 
 The core of the 0/1 knapsack algorithm is implemented in the
 `ao-doll-smuggler.knapsack/raw-max-value` function. It takes three
