@@ -2,24 +2,26 @@
   (:gen-class))
 
 (defn position->index [position]
-  (- position 1))
+  (dec position))
 
-(defn index->position [index]
-  (+ index 1))
 
 (defn invalid-position? [position]
   (< position 1))
 
+
 (defn invalid-weight? [weight]
   (<= weight 0))
+
 
 (defn invalid-position-or-weight? [position weight]
   (or (invalid-position? position)
       (invalid-weight? weight)))
 
+
 (defn get-doll [doll-data position]
   (let [index (position->index position)]
     (nth doll-data index nil)))
+
 
 ;;; Mutual recursion between the following two and `max-value'
 (declare max-with-doll)
