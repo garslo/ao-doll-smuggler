@@ -1,12 +1,12 @@
 (ns ao-doll-smuggler.core
-  (:require; [clojure.tools.cli :refer [cli]]
-            [clojure.java.io :refer [as-file]]
+  (:require [clojure.java.io :refer [as-file]]
             [ao-doll-smuggler.loader :refer [get-doll-info
                                              get-max-weight]]
             [ao-doll-smuggler.knapsack :refer [collect-dolls-in-solution]])
   (:gen-class))
 
 (defn print-solution [dolls]
+  "Prints `dolls' as a basic formatted table."
   (println "packed dolls:")
   (println)
   (println (format "%s%10s%8s" "name" "weight" "value"))
@@ -17,14 +17,19 @@
       (println (format "%s\t%s\t%s" name weight value)))))
 
 (defn invalid-input? [weight doll-data]
+  "Predicate determining if `weight' and `doll-data' are acceptable
+   inputs."
   (or (not weight)
       (empty? doll-data)))
 
 (defn invalid-file? [filename]
+  "Predicate determining if `filename' is usable."
   (or (empty? filename)
       (not (.exists (as-file filename)))))
 
 (defn die-if-invalid [args]
+  "Determines if `args' contains a valid file. If not, prints a
+   message and kills the program."
   (if (or (empty? args)
           (invalid-file? (first args)))
     (do
