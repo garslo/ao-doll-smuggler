@@ -57,6 +57,7 @@
 ;;; dynamic programming algorithm.
 (def max-value (memoize raw-max-value))
 
+
 (defn max-with-doll [doll-data position current-weight]
   "Returns the maximum value obtainable with the doll at `position'
    with max weight `current-weight' placed in the knapsack."
@@ -65,11 +66,13 @@
         new-weight (- current-weight (doll :weight))]
       (max-value doll-data new-position new-weight)))
 
+
 (defn max-without-doll [doll-data position current-weight]
   "Returns the maximum value obtainable without the doll at `position'
    with max weight `current-weight' in the knapsack."
   (let [new-position (- position 1)]
     (max-value doll-data new-position current-weight)))
+
 
 (defn create-knapsack-solver [doll-data]
   (fn [position max-weight]
@@ -81,19 +84,22 @@
   (not (= (max-value doll-data position weight)
           (max-value doll-data (- position 1) weight))))
 
+
+;;; TODO: This is ugly
 (defn collect-dolls-in-solution [doll-data max-weight]
-  (letfn [(collect-dolls [position weight acc]
-            (let [doll (get-doll doll-data position)]
-                (cond
-                 (or (= weight 0) (= position 0)) acc
-                 (doll-is-included? doll-data
-                                    position
-                                    weight) (collect-dolls
-                                                      (dec position)
-                                                      (- weight
-                                                         (doll :weight))
-                                               (conj acc doll))
-                 true (collect-dolls (dec position)
-                                     weight
-                                     acc))))]
+  "Returns a set containing the dolls in `doll-data' which comprise
+   the optimal knapsack solution."
+  (letfn
+      [(collect-dolls [position weight acc]
+         (let [doll (get-doll doll-data position)]
+           (cond
+            (or (= weight 0) (= position 0)) acc
+            (doll-is-included? doll-data position weight) (collect-dolls
+                                                           (dec position)
+                                                           (- weight
+                                                              (doll :weight))
+                                                           (conj acc doll))
+            true (collect-dolls (dec position)
+                                                   weight
+                                                   acc))))]
     (collect-dolls (count doll-data) max-weight #{})))
